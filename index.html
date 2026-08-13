@@ -360,7 +360,7 @@
 
     /* Faixa de estatísticas (30+ anos, 2 unidades, 5.0 avaliação).
        Os números começam em 0 e sobem animados quando aparecem na
-       tela — ver função animateCount() no <script> no final do arquivo. */
+       tela — ver função animateCount() no bloco de JavaScript, no final do arquivo. */
     .stat-strip{
         display:grid;
         grid-template-columns:repeat(3,1fr);
@@ -988,10 +988,12 @@
 </footer>
 
 <script>
-    // year
+    // Preenche o ano atual no copyright do rodapé automaticamente
     document.getElementById('anoAtual').textContent = new Date().getFullYear();
 
-    // mobile menu
+    // ---- Menu mobile (gaveta lateral) ----
+    // Clicar no hambúrguer abre/fecha o menu; clicar em qualquer link do
+    // menu fecha ele de novo (útil ao navegar pelo celular).
     var hamburger = document.getElementById('hamburgerBtn');
     var navMenu = document.getElementById('navMenu');
     hamburger.addEventListener('click', function(){
@@ -1007,11 +1009,14 @@
         });
     });
 
-    // header scroll state + progress bar + back-to-top
+    // ---- Efeitos de rolagem: cabeçalho encolhe, barra de progresso e botão "voltar ao topo" ----
     var header = document.getElementById('siteHeader');
     var progressBar = document.getElementById('progressBar');
     var toTopBtn = document.getElementById('toTopBtn');
 
+    // Roda a cada evento de scroll: alterna a classe "scrolled" no
+    // cabeçalho, mostra/esconde o botão de topo e recalcula a % da
+    // barra de progresso com base em quanto já foi rolado da página.
     function onScroll(){
         var y = window.scrollY || document.documentElement.scrollTop;
         header.classList.toggle('scrolled', y > 40);
@@ -1028,7 +1033,9 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // active nav link highlighting
+    // ---- Destaque do link ativo no menu ----
+    // Observa qual seção está no "meio" da tela no momento e marca o
+    // link correspondente no menu com a classe "active".
     var sections = document.querySelectorAll('section[id]');
     var navLinks = document.querySelectorAll('.nav-link');
     var navObserver = new IntersectionObserver(function(entries){
@@ -1043,7 +1050,9 @@
     }, { rootMargin: '-45% 0px -45% 0px' });
     sections.forEach(function(s){ navObserver.observe(s); });
 
-    // scroll reveal
+    // ---- Animação de entrada ao rolar (fade-up) ----
+    // Assim que um elemento ".reveal" entra na tela, adiciona a classe
+    // "is-visible" (com um pequeno atraso escalonado) e para de observá-lo.
     var revealEls = document.querySelectorAll('.reveal:not(.is-visible)');
     var revealObserver = new IntersectionObserver(function(entries){
         entries.forEach(function(entry, i){
@@ -1057,7 +1066,9 @@
     }, { threshold: 0.15 });
     revealEls.forEach(function(el){ revealObserver.observe(el); });
 
-    // animated counters
+    // ---- Contadores animados (30+, 2, 5.0) ----
+    // Sobe o número de 0 até o valor definido em "data-count" com uma
+    // curva de desaceleração (ease-out), usando requestAnimationFrame.
     function animateCount(el){
         var target = parseFloat(el.getAttribute('data-count'));
         var decimals = parseInt(el.getAttribute('data-decimal') || '0', 10);
@@ -1086,7 +1097,9 @@
     }, { threshold: 0.4 });
     counters.forEach(function(c){ countObserver.observe(c); });
 
-    // card tilt / glow-follow
+    // ---- Inclinação 3D + brilho seguindo o mouse nos cards de serviço ----
+    // Se o usuário pediu "menos movimento" nas configurações do sistema
+    // (prefers-reduced-motion), essas animações de mouse são desativadas.
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!reduceMotion){
         document.querySelectorAll('.card').forEach(function(card){
@@ -1105,7 +1118,9 @@
             });
         });
 
-        // magnetic buttons
+        // ---- Botões "magnéticos" ----
+        // O botão se desloca um pouco na direção do mouse enquanto o
+        // cursor passa por cima, e volta ao lugar quando o mouse sai.
         document.querySelectorAll('.magnetic').forEach(function(btn){
             btn.addEventListener('mousemove', function(e){
                 var rect = btn.getBoundingClientRect();
